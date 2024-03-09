@@ -41,7 +41,7 @@ char server[] = "futurfox.aki.fyi";
 int port = 8888; 
 
 unsigned long lastConnectionTime = 0;            // last time you connected to the server, in milliseconds
-const unsigned long postingInterval = 2000L; // delay between updates, in milliseconds
+const unsigned long postingInterval = 500L; // delay between updates, in milliseconds
 
 WiFiClient client;
 
@@ -58,7 +58,7 @@ void setup() {
   
   //Serial.begin(9600);
   //while (!Serial) {
-    ; // wait for serial port to connect
+  //  ; // wait for serial port to connect
   //}
 
   // attempt to connect to WiFi network
@@ -83,12 +83,12 @@ void printWiFiStatus() {
   //Serial.println(WiFi.SSID());
 
   // print IP address
-  IPAddress ip = WiFi.localIP();
+  //IPAddress ip = WiFi.localIP();
   //Serial.print("IP Address: ");
   //Serial.println(ip);
 
   // print the received signal strength
-  long rssi = WiFi.RSSI();
+  //long rssi = WiFi.RSSI();
   //Serial.print("signal strength (RSSI):");
   //Serial.print(rssi);
   //Serial.println(" dBm");
