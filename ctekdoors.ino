@@ -1,5 +1,15 @@
 /*
-C-Tek
+C-Tek Door Listener
+by: Aki
+
+Designed for an Adafruit Feather MO Wifi - ATSAMD21 + ATWINC1500 
+with attached NeoPixel FeatherWing - 4x8 RGB LED
+
+This polls a URL every x milliseconds (defined by postingInterval) and checks if a door is open
+
+TODO
+Determine what door we are
+make sure we are checking the status of the right door, not just a generic URL
  */
 
 
@@ -20,7 +30,6 @@ int status = WL_IDLE_STATUS;
 bool doorstatus = false;
 
 //NeoPixel setup
-
 #define LED_PIN    6
 #define LED_COUNT 32
 
@@ -31,19 +40,17 @@ Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(8, 4, 6,
 
 
 
-//IPAddress server(74,125,232,128);  // numeric IP for Google (no DNS)
+//IPAddress server(74,125,232,128);  // numeric IP (if you want to avoid DNS)
 char server[] = "futurfox.aki.fyi";
-int port = 8888;      // name address for Google (using DNS)
+int port = 8888; 
 
 unsigned long lastConnectionTime = 0;            // last time you connected to the server, in milliseconds
 const unsigned long postingInterval = 2000L; // delay between updates, in milliseconds
 
-// Initialize the Ethernet client library
-// with the IP address and port of the server
 WiFiClient client;
 
 void setup() {
-  //Configure pins for Adafruit ATWINC1500 Feather
+  //Configure pins for Adafruit Feather M0
   WiFi.setPins(8,7,4,2);
   matrix.begin();
   matrix.setBrightness(10);
@@ -58,14 +65,14 @@ void setup() {
     ; // wait for serial port to connect
   }
 
-  // attempt to connect to WiFi network:
+  // attempt to connect to WiFi network
   while (status != WL_CONNECTED) {
     Serial.print("Attempting to connect to SSID: ");
     Serial.println(ssid);
-    // Connect to WPA/WPA2 network. Change this line if using open or WEP network:
+    // Connect to WPA/WPA2 network
     status = WiFi.begin(ssid, pass);
 
-    // wait 10 seconds for connection:
+    // wait 10 seconds for connection
     delay(10000);
   }
   Serial.println("Connected to wifi");
@@ -75,16 +82,16 @@ void setup() {
 
 
 void printWiFiStatus() {
-  // print the SSID of the network you're attached to:
+  // print the SSID of the network you're attached to
   Serial.print("SSID: ");
   Serial.println(WiFi.SSID());
 
-  // print your WiFi shield's IP address:
+  // print IP address
   IPAddress ip = WiFi.localIP();
   Serial.print("IP Address: ");
   Serial.println(ip);
 
-  // print the received signal strength:
+  // print the received signal strength
   long rssi = WiFi.RSSI();
   Serial.print("signal strength (RSSI):");
   Serial.print(rssi);
@@ -124,18 +131,17 @@ void getdoorstatus() {
   // close any connection before send a new request.
   client.stop();
 
-  // if there's a successful connection:
+  // if there's a successful connection
   if (client.connect(server, port)) {
     doorstatus = false;
     client.println("GET /");
-    // client.println("Connection: close");
     client.println();
 
-    // note the time that the connection was made:
+    // note the time that the connection was made
     lastConnectionTime = millis();
   }
   else {
-    // if we couldn't make a connection:
+    // if we couldn't make a connection
     Serial.println("connection failed");
     matrix.fill(0x00fc8803, 0, 32);
     matrix.show();
