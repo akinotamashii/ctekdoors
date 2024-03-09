@@ -24,9 +24,7 @@ make sure we are checking the status of the right door, not just a generic URL
 char ssid[] = SECRET_SSID;        
 char pass[] = SECRET_PASS;    
 int keyIndex = 0;           
-
 int status = WL_IDLE_STATUS;
-
 bool doorstatus = false;
 
 //NeoPixel setup
@@ -37,8 +35,6 @@ Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(8, 4, 6,
   NEO_MATRIX_TOP     + NEO_MATRIX_RIGHT +
   NEO_MATRIX_COLUMNS + NEO_MATRIX_PROGRESSIVE,
   NEO_GRB            + NEO_KHZ800);
-
-
 
 //IPAddress server(74,125,232,128);  // numeric IP (if you want to avoid DNS)
 char server[] = "futurfox.aki.fyi";
@@ -60,22 +56,22 @@ void setup() {
   matrix.fill(0x00fc0000, 24, 8);
   matrix.show();
   
-  Serial.begin(9600);
-  while (!Serial) {
+  //Serial.begin(9600);
+  //while (!Serial) {
     ; // wait for serial port to connect
-  }
+  //}
 
   // attempt to connect to WiFi network
   while (status != WL_CONNECTED) {
-    Serial.print("Attempting to connect to SSID: ");
-    Serial.println(ssid);
+    //Serial.print("Attempting to connect to SSID: ");
+    //Serial.println(ssid);
     // Connect to WPA/WPA2 network
     status = WiFi.begin(ssid, pass);
 
     // wait 10 seconds for connection
     delay(10000);
   }
-  Serial.println("Connected to wifi");
+  //Serial.println("Connected to wifi");
   printWiFiStatus();
 
 }
@@ -83,19 +79,19 @@ void setup() {
 
 void printWiFiStatus() {
   // print the SSID of the network you're attached to
-  Serial.print("SSID: ");
-  Serial.println(WiFi.SSID());
+  //Serial.print("SSID: ");
+  //Serial.println(WiFi.SSID());
 
   // print IP address
   IPAddress ip = WiFi.localIP();
-  Serial.print("IP Address: ");
-  Serial.println(ip);
+  //Serial.print("IP Address: ");
+  //Serial.println(ip);
 
   // print the received signal strength
   long rssi = WiFi.RSSI();
-  Serial.print("signal strength (RSSI):");
-  Serial.print(rssi);
-  Serial.println(" dBm");
+  //Serial.print("signal strength (RSSI):");
+  //Serial.print(rssi);
+  //Serial.println(" dBm");
 }
 
 void loop() {
@@ -103,13 +99,13 @@ void loop() {
   while (client.available()) {
     char c = client.read();
     if (c == '0') {
-      Serial.write("Door is Locked \n");
+      //Serial.write("Door is Locked \n");
       matrix.fill(0x00ff0000, 0, 32);
       matrix.show();
       doorstatus = true;
     }
     else if (c == '1') {
-      Serial.write("Door is Open \n");
+      //Serial.write("Door is Open \n");
       matrix.fill(0x0000ff00, 0, 32);
       matrix.show();
       doorstatus = true;
@@ -142,14 +138,9 @@ void getdoorstatus() {
   }
   else {
     // if we couldn't make a connection
-    Serial.println("connection failed");
+    //Serial.println("connection failed");
     matrix.fill(0x00fc8803, 0, 32);
     matrix.show();
     delay(3000);
   }
 }
-
-
-
-
-
